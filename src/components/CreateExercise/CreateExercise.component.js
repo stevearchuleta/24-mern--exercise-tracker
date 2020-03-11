@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import axios from 'axios';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 
@@ -21,13 +22,22 @@ class CreateExercise extends Component {
          }
        }
    
-   //react lifecylce method that is automatically called just before anything is loaded/rendered onto the page; for now, I hard code a 'test user'
+   //react lifecylce method that is automatically called just before anything is loaded/rendered onto the page; for now, I hard code a 'test user', but eventually I will write an axios.get request to dynamically populate the user from the users array
    componentDidMount() {
-      this.setState({
-         users: ['test user'], //eventually this will be loaded from the MongoDB database
-         username: 'test user'
-      })
-   }
+      axios.get('http://localhost:5000/users/')
+        .then(response => {
+          if (response.data.length > 0) {
+            this.setState({
+              users: response.data.map(user => user.username),
+              username: response.data[0].username
+            })
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        })
+  
+    }
 
    onChangeUsername(event) {
       this.setState({
@@ -65,6 +75,9 @@ class CreateExercise extends Component {
 
       console.log(exercise);
 
+      axios.post('http://localhost:5000/exercises/add', exercise)
+         .then(res => console.log(res.data));
+
       // now take user back to the list of exercises (home page)
       // window.location = '/';
    }
@@ -82,13 +95,11 @@ class CreateExercise extends Component {
                      className='form-control'
                      value={this.state.username}
                      onChange={this.onChangeUsername}>
-                     
-                     {/* inside a select box the user has different options; herein, this code gets the select options from the users array, which itself is stored in the MongoDB database*/}
                      {
-                        this.state.users.map(user => {  // map through each element in the array
+                        this.state.users.map(function(user) {  // map through each element in the array
                            return   <option             // return a series of options for the select box
                                        key={user} 
-                                       value={user}> {user} 
+                                       value={user}>{user} 
                                     </option>
                         })
                      }   

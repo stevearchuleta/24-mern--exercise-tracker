@@ -52,6 +52,12 @@ class CreateUser extends Component {
                      value={this.state.username}
                      onChange={this.onChangeUsername}/>
                </div>
+               <div className='form-group'>
+                  <input
+                     type='submit'
+                     value='Create User'
+                     className='btn btn-primary' />
+               </div>
             </form>
          </div>
       )

@@ -45,14 +45,14 @@ router.route('/add').post((req, res) => {
 //handles http post request at localhost:5000/exercises//<INSERT MONGODB OBJECT ID HERE> by first finding the desired exercise by passing the parameter directly from the url, and then updating any of the exercise object's properties
 router.route('/update/:id').post((req, res) => {
    Exercise.findById(req.params.id)
-      .then(exercise => {
-         exercise.username = req.body.username;
-         exercise.description = req.body.description;
-         exercise.duration = Number(req.body.duration);
-         exercise.date = Date.parse(req.body.date);
-         
-         exercise.save()
-            .then(() => res.json('Exercise Updated!'))
+     .then(exercise => {
+       exercise.username = req.body.username;
+       exercise.description = req.body.description;
+       exercise.duration = Number(req.body.duration);
+       exercise.date = Date.parse(req.body.date);
+ 
+       exercise.save()
+         .then(() => res.json('Exercise updated!'))
             .catch(err => res.status(400).json('Error: ' + err));
       })
       .catch(err => res.status(400).json('Error: ' + err));
