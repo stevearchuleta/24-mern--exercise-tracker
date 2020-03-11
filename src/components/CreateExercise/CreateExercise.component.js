@@ -5,7 +5,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 class CreateExercise extends Component {
       constructor(props) {
          super(props);
-         //ensures that this refers to the CreateExercise class
+         //ensures that 'this' refers to the CreateExercise class (inside the methods below)
          this.onChangeUsername = this.onChangeUsername.bind(this);
          this.onChangeDescription = this.onChangeDescription.bind(this);
          this.onChangeDuration = this.onChangeDuration.bind(this);
@@ -21,10 +21,10 @@ class CreateExercise extends Component {
          }
        }
    
-   //react lifecylce method that is automatically called just before anything is loaded/rendered onto the page
+   //react lifecylce method that is automatically called just before anything is loaded/rendered onto the page; for now, I hard code a 'test user'
    componentDidMount() {
       this.setState({
-         users: ['test user'],
+         users: ['test user'], //eventually this will be loaded from the MongoDB database
          username: 'test user'
       })
    }
@@ -55,22 +55,24 @@ class CreateExercise extends Component {
 
    onSubmit(event) {
       event.preventDefault();
+
       const exercise = {
          username: this.state.username,
          description: this.state.description,
          duration: this.state.duration,
          date: this.state.date
       }
-      console.log('[onSubmit: ]', exercise);
 
-      // now take user back to the list of exercises
-      window.location = '/';
+      console.log(exercise);
+
+      // now take user back to the list of exercises (home page)
+      // window.location = '/';
    }
 
    render() {
       return (
          <div>
-            <h3>Create Exercise Log</h3>
+            <h3>Create New Exercise Log</h3>
             <form onSubmit={this.onSubmit}>
                <div className='form-group'>
                   <label>Username: </label>
@@ -83,8 +85,8 @@ class CreateExercise extends Component {
                      
                      {/* inside a select box the user has different options; herein, this code gets the select options from the users array, which itself is stored in the MongoDB database*/}
                      {
-                        this.state.users.map(user => {
-                           return   <option 
+                        this.state.users.map(user => {  // map through each element in the array
+                           return   <option             // return a series of options for the select box
                                        key={user} 
                                        value={user}> {user} 
                                     </option>
